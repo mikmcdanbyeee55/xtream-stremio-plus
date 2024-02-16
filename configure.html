@@ -339,3 +339,103 @@
 
             $('#exampleIPTVurl').toggle( option === "url")
         }
+function getAllUrlParams(url) {
+    var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
+    var baseURL = url.split('/')[0] + "//" + url.split('?')[0].split('/')[2] || null;
+
+    var obj = {};
+
+    if (queryString) {
+        queryString = queryString.split('#')[0];
+        var arr = queryString.split('&');
+
+        for (var i = 0; i < arr.length; i++) {
+            var a = arr[i].split('=');
+            var paramName = a[0];
+            var paramValue = typeof a[1] === 'undefined' ? true : a[1];
+
+            if (paramName.match(/\[(\d+)?\]$/)) {
+                var key = paramName.replace(/\[(\d+)?\]/, '');
+                if (!obj[key]) obj[key] = [];
+
+                if (paramName.match(/\[\d+\]$/)) {
+                    var index = /\[(\d+)\]/.exec(paramName)[1];
+                    obj[key][index] = paramValue;
+                } else {
+                    obj[key].push(paramValue);
+                }
+            } else {
+                if (!obj[paramName]) {
+                    obj[paramName] = paramValue;
+                } else if (obj[paramName] && typeof obj[paramName] === 'string') {
+                    obj[paramName] = [obj[paramName]];
+                    obj[paramName].push(paramValue);
+                } else {
+                    obj[paramName].push(paramValue);
+                }
+            }
+        }
+    }
+
+    obj["BaseURL"] = baseURL || null;
+    return obj;
+}
+function generateInstallLink() {
+
+            var isParametersValid = true
+
+            var params = {}, configuration
+
+            if($('#listingOption').val() === "url"){
+               // IF M3U URL OPTION IS SELECTED
+               
+               var url = $('#iptvURL').val().trim() || ""
+               if(url.length > 0){
+                  params = getAllUrlParams(url)
+
+                  if(params && params.output){
+                     delete params.output
+                  }
+                  if(params && params.type){
+                     delete params.type
+                  } 
+                  isParametersValid = true
+               }
+            }else{
+               // IF API OPTION IS SELECTED
+            
+               var BaseURL = $('#dnsport').val().trim() || null
+               var username = $('#username').val().trim() || null
+               var password= $('#password').val().trim()|| null
+
+               params = {username,password,BaseURL}
+               
+               isParametersValid = true
+            }
+
+            configuration = encode(params)    
+
+            if(params && params.BaseURL && !params.BaseURL.includes("http") && params.BaseURL.length > 0){
+               isParametersValid = false
+               alert("Please indicate http or http(s) status!")
+            }
+
+            if(params && !params.username){
+               isParametersValid = false
+               alert("Username is missing!")
+            }
+
+            if(params && !params.password){
+               isParametersValid = false
+               alert("Password is missing!")
+            }
+                       
+            if (params && params.username && params.password && params.BaseURL && isParametersValid === true) {
+               installLink.href = 'stremio://' + window.location.host + '/'  + configuration + '/manifest.json';
+               document.getElementById("installURL").value = window.location.protocol+"//"+window.location.host+"/"+ configuration+ "/manifest.json";
+            }
+            
+        }
+    </script>
+</body>
+</html>
