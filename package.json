@@ -1,18 +1,21 @@
 {
   "name": "your-iptv-1",
   "version": "1.0.0",
-  "description": "",
+  "description": "Your IPTV App Description",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["iptv", "streaming", "app"],
+  "author": "mikmc",
   "license": "ISC",
+  "engines": {
+    "node": "14.x"
+  },
   "dependencies": {
-    "axios": "^1.6.7",
-    "ejs": "^3.1.8",
-    "express": "^4.18.1",
+    "axios": "^0.21.1",  // Updated version (check for the latest version)
+    "ejs": "^3.1.6",     // Updated version (check for the latest version)
+    "express": "^4.17.1", // Updated version (check for the latest version)
     "node-cache": "^5.1.2"
   }
 }
