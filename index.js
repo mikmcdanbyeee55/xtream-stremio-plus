@@ -172,6 +172,6 @@ if (module.parent) {
   module.exports = app;
 } else {
   app.listen(config.port, function () {
-  console.log(config)
+  console.log(config);
 });
-}
+
