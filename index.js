@@ -5,6 +5,8 @@ const config = require('./config');
 const MANIFEST = require('./manifest');
 const { getManifest, getCatalog, getMeta, getUserData } = require("./addon");
 
+// ... (rest of your code)
+
 const NodeCache = require( "node-cache" );
 const myCache = new NodeCache({stdTTL:15*60});
 
@@ -172,6 +174,6 @@ if (module.parent) {
   module.exports = app;
 } else {
   app.listen(config.port, function () {
-  console.log(config);
+  console.log(config)
 });
-
+}
