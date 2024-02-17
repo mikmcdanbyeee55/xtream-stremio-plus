@@ -1,10 +1,10 @@
 const axios = require('axios').default;
-axios.defaults.headers["Content-Type"] = "application/json";
-axios.defaults.timeout = 10000;
-axios.defaults.method = "GET";
+axios.defaults.headers.get["content-type"] = "application/json";
+axios.defaults.timeout = 60000
+axios.defaults.method = "GET"
 
+function getUserData(userConf) {
 
-async function getUserData(userConf) {
     let retrievedData, url, obj = {}
     try {
         retrievedData = JSON.parse(Buffer.from(userConf, 'base64').toString())      
@@ -13,9 +13,9 @@ async function getUserData(userConf) {
         return "error while parsing url"
     }
     
-    let domainName, baseURL, idPrefix
+    let domainName,baseURL,idPrefix
 
-    if (typeof retrievedData === "object") {
+    if(typeof retrievedData === "object"){
         domainName = retrievedData.BaseURL.split("/")[2].split(":")[0] || "unknown"
         baseURL = retrievedData.BaseURL
         idPrefix = domainName.charAt(0) + domainName.substr(Math.ceil(domainName.length / 2 - 1), domainName.length % 2 === 0 ? 2 : 1) + domainName.charAt(domainName.length - 1) + ":";
@@ -24,11 +24,11 @@ async function getUserData(userConf) {
             baseURL,
             domainName,
             idPrefix,
-            username: retrievedData.username,
-            password: retrievedData.password
+            username:retrievedData.username,
+            password:retrievedData.password
         }
 
-    } else if (retrievedData.includes("http")) {
+    }else if(retrievedData.includes("http")){
         url = retrievedData
         
         const queryString = url.split('?')[1] || "unknown"
@@ -37,12 +37,8 @@ async function getUserData(userConf) {
         domainName = url.split("?")[0].split("/")[2].split(":")[0] || "unknown"
         idPrefix = domainName.charAt(0) + domainName.substr(Math.ceil(domainName.length / 2 - 1), domainName.length % 2 === 0 ? 2 : 1) + domainName.charAt(domainName.length - 1) + ":";
         
-        if (queryString === undefined) {
-            return { result: "URL does not have any queries!" }
-        }
-        if (baseURL === undefined) {
-            return { result: "URL does not seem like an url!" }
-        }
+        if(queryString === undefined){return {result:"URL does not have any queries!"}}
+        if(baseURL === undefined){return {result:"URL does not seem like an url!"}}
         
         obj.baseURL = baseURL
         obj.domainName = domainName
@@ -51,40 +47,18 @@ async function getUserData(userConf) {
         const urlParams = new URLSearchParams(queryString);
         const entries = urlParams.entries();
         
-        for (const entry of entries) {
+        for(const entry of entries) {
             obj[entry[0]] = entry[1]
         }
     }
 
-    if (obj.username && obj.password && obj.baseURL) {
+    if(obj.username && obj.password && obj.baseURL){
         return obj
-    } else {
+    }else{
         console.log("Error while parsing!")
         return {}
     }
 }
-
-async function checkM3UStatus(baseURL, username, password) {
-    try {
-        const response = await axios.get(`${baseURL}/player_api.php`, {
-            params: {
-                username,
-                password,
-            },
-        });
-
-        if (response.status === 200 && response.data && response.data.user_info && response.data.user_info.status) {
-            const m3uStatus = response.data.user_info.status.toLowerCase();
-            return m3uStatus === 'active' ? 'active' : 'inactive';
-        } else {
-            return 'inactive';
-        }
-    } catch (error) {
-        console.error(error);
-        return 'inactive';
-    }
-}
-
 async function getManifest(url) {
     const obj = getUserData(url)
 
@@ -370,9 +344,4 @@ async function getMeta(url,type,id) {
 
     return meta
 }
-module.exports = {
-    getUserData,
-    getManifest,
-    getCatalog,
-    getMeta,
-    checkM3UStatus, // Added the new function to the exports
+module.exports={getUserData,getManifest,getCatalog,getMeta}
