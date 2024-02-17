@@ -135,10 +135,20 @@
       }
 
       .tester-link a {
-         color: lightblue;
+         color: #8A5AAB; /* Color matching the button */
          text-decoration: none;
          font-size: 1.5rem;
          font-weight: 600;
+         display: inline-block; /* Make it inline-block to allow background color */
+         padding: 10px 20px; /* Adjust padding for visibility */
+         background: #fff; /* Background color */
+         border-radius: 5px; /* Rounded corners */
+         transition: background 0.3s ease-in-out; /* Smooth transition */
+      }
+
+      .tester-link a:hover {
+         background: #8A5AAB; /* Change background color on hover */
+         color: #fff; /* Change text color on hover */
       }
    </style>
 </head>
@@ -177,7 +187,6 @@
       <div class="input-group" id="iptvURLGroup">
          <label class="input-label" id="iptvURLLabel" for="iptvURL">Tu URL de lista de reproducción M3U IPTV</label>
          <input type="text" id="iptvURL" class="input-field" placeholder="Ingresa tu URL de lista de reproducción M3U IPTV aquí">
-         <p id="exampleIPTVurl">ej. http://DOMINIO.COM:80/get.php?username=USUARIO&password=CONTRASEÑA&type=m3u&output=ts</p>
       </div>
 
       <div class="input-group" id="dnsportGroup">
@@ -198,7 +207,7 @@
       <div class="separator"></div>
 
       <div class="tester-link">
-         <a href="#">Tester Link</a>
+         <a href="#">M3U Test</a>
       </div>
 
       <a id="installLink" class="install-link" href="#">
@@ -260,7 +269,6 @@
 
             $('#iptvURL').hide();
             $("#iptvURLLabel").hide();
-            $('#exampleIPTVurl').hide();
          } else if (option === "url") {
             $("#dnsport").hide();
             $("#dnsportLabel").hide();
@@ -273,7 +281,6 @@
 
             $('#iptvURL').show();
             $("#iptvURLLabel").show();
-            $('#exampleIPTVurl').show();
          }
       }
 
@@ -286,7 +293,7 @@
             queryString = queryString.split('#')[0];
             var arr = queryString.split('&');
 
-            for (var i = 0; i < arr.length; i++) {
+            for (var i = 0; i = 0) {
                var a = arr[i].split('=');
                var paramName = a[0];
                var paramValue = typeof (a[1]) === 'undefined' ? true : a[1];
